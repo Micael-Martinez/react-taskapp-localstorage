@@ -1,25 +1,45 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { TaskCreator } from './components/TaskCreator';
+import { TaskTable } from './components/TaskTable';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
+    const [tasks, setTasks] = useState([])
+
+    const createNewTask = (taskName) => {
+        if (!tasks.some(task => task.name === taskName)) {
+            setTasks([...tasks, { name: taskName, done: false }])
+        } else {
+            return console.log('Amiguito esta repetida')
+        }
+    }
+
+    const toggleTask = task => {
+        //task viene del componente en donde esta input checkbox, en el onChange le paso la funcion toggleTask(task), donde aca agarro esa task a la que le hice click y la retorna para usarla aca como task.
+        setTasks(tasks.map(t => (t.name === task.name) ? { ...t, done: !t.done } : t))
+    }
+
+
+    useEffect(() => {
+        let data = localStorage.getItem('tasks')
+        if (data) {
+            setTasks(JSON.parse(data))
+        }
+    }, [])
+
+    useEffect(() => {
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+    }, [tasks])
+
+
+    return (
+        <div className="App">
+            <TaskCreator createNewTask={createNewTask} />
+            <TaskTable tasks={tasks} toggleTask={toggleTask} />
+            <TaskTable tasks={tasks} toggleTask={toggleTask} />
+
+        </div>
+    );
+}
 export default App;
