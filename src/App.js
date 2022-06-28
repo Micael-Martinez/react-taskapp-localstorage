@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { TaskCreator } from './components/TaskCreator';
 import { TaskTable } from './components/TaskTable';
+import { VisibilityControl } from './components/VisibilityControl';
 import './App.css';
 
 function App() {
 
     const [tasks, setTasks] = useState([])
+    const [showCompleted, setShowCompleted] = useState(false)
 
     const createNewTask = (taskName) => {
         if (!tasks.some(task => task.name === taskName)) {
@@ -35,9 +37,11 @@ function App() {
 
     return (
         <div className="App">
+
             <TaskCreator createNewTask={createNewTask} />
             <TaskTable tasks={tasks} toggleTask={toggleTask} />
-            <TaskTable tasks={tasks} toggleTask={toggleTask} />
+            <VisibilityControl setShowCompleted={setShowCompleted} showCompleted={showCompleted} />
+
 
         </div>
     );
