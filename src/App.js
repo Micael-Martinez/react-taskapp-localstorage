@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { TaskCreator } from './components/TaskCreator';
 import { TaskTable } from './components/TaskTable';
 import { VisibilityControl } from './components/VisibilityControl';
-import './App.css';
+import { Container } from './components/Container';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
@@ -22,6 +23,10 @@ function App() {
         setTasks(tasks.map(t => (t.name === task.name) ? { ...t, done: !t.done } : t))
     }
 
+    const cleanTasks = () => {
+        setTasks(tasks.filter(task => !task.done))
+        setShowCompleted(false)
+    }
 
     useEffect(() => {
         let data = localStorage.getItem('tasks')
@@ -36,14 +41,20 @@ function App() {
 
 
     return (
-        <div className="App">
-
-            <TaskCreator createNewTask={createNewTask} />
-            <TaskTable tasks={tasks} toggleTask={toggleTask} />
-            <VisibilityControl setShowCompleted={setShowCompleted} showCompleted={showCompleted} />
+        <main className='bg-dark vh-100 text-white'>
+            <Container>
 
 
-        </div>
+                <TaskCreator createNewTask={createNewTask} />
+                <TaskTable tasks={tasks} toggleTask={toggleTask} />
+
+                {/*//setShowCompleted es pasada como una funcion a VisibilityControl, en Visibility le paso el argumento a setShowCompleted prop, checked va a tomar el valor de e.target.value(true or false), si es true, retorna, si no retorna nada */}
+                <VisibilityControl isChecked={showCompleted} setShowCompleted={(checked) => setShowCompleted(checked)} cleanTasks={cleanTasks} />
+                {showCompleted && <TaskTable tasks={tasks} toggleTask={toggleTask} showCompleted={showCompleted} />}
+
+
+            </Container>
+        </main>
     );
 }
 export default App;

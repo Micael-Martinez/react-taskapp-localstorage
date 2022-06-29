@@ -16,7 +16,7 @@ export const TaskCreator = ({ createNewTask }) => {
 		<div>
 			<form onSubmit={handleSubmit}>
 				<input onChange={handleChange} type="text" placeholder="Write your task" value={newTask} />
-				<button>Save Task</button>
+				<button className="btn btn-primary m-2 p-1">Save Task</button>
 			</form>
 		</div>
 	);
